@@ -1,81 +1,65 @@
 <template>
   <div id="app">
-    <h1>Uploader demos</h1>
-    <ul>
-      <li>
-        <p>Single file multipart uploader with image as Browse button</p>
-        <uploader end-point="http://localhost:5000" :multipartChunkSize="102400" :multipart="true" :showProgressBar="true" @fileUploaded="demo1Status" @startUpload="resetLog(demo1)">
-          <img-placeholder :width="200" :height="150" slot="browse-btn">Browse</img-placeholder>
-        </uploader>
-        <pre>{{ demo1 }}</pre>
-      </li>
+    <form id="formTest" 
+    action="http://localhost:5000/api/post" 
+    method="post"
+    @submit="formSubmitted"
+    >
+        <input
+          type="text"
+          value=""
+          name="name"
+        />
+        <input
+          type="email"
+          value=""
+          name="email"
+        />
+      <uploader
+        end-point="http://localhost:5000/api/post"
+        :multiple="true"
+        :multipart="true"
+      >
+        <button slot="upload-btn" id="upload-btn" class="disable-btn">Upload</button>
+      </uploader> 
 
-      <li>
-        <p>Multiple File multipart uploader</p>
-        <uploader end-point="http://localhost:5000" :multipartChunkSize="102400" :multipart="true" :multiple="true" @change="uploadFile"></uploader>
-      </li>
-
-      <li>
-        <p>Multiple File uploader with extra form element slot</p>
-        <uploader end-point="http://localhost:5000" :multiple="true" :userDefinedProperties="[{property: 'type', required: true}]">
-          <template slot="extra" scope="props">
-            <select v-model="props.fileObj.type">
-              <option :value="null">select type</option>
-              <option value="1">one</option>
-              <option value="2">two</option>
-              <option value="3">three</option>
-            </select>
-            <div><pre>{{ props.fileObj }}</pre></div>
-          </template>
-        </uploader>
-      </li>
-
-      <li>
-        <p>Uploading with additional headers</p>
-        <uploader end-point="http://localhost:5000" :headers="{Authorization: 'Bearer 123456'}"></uploader>
-      </li>
-
-
-      <li>
-        <p>Using error handler</p>
-        <uploader end-point="http://localhost:5000" :errorHandler="errorHandler"></uploader>
-      </li>
-
-    </ul>
+      <button type="submit">送信</button>
+    </form>
   </div>
 </template>
 
 <script>
-import Uploader from 'vuejs-uploader'
-import ImgPlaceholder from 'vuejs-image-placeholder'
+import Uploader from "vuejs-uploader";
+
 export default {
-  name: 'app',
+  name: "app",
   components: {
     Uploader,
-    ImgPlaceholder
   },
-  data () {
+  data() {
     return {
-      demo1: null
-    }
+      name: "aaa",
+      email: "natsuki@fork.co.jp",
+    };
   },
   methods: {
-    demo1Status (response) {
-      this.demo1 = response
+    demo1Status(response) {
+      this.demo1 = response;
     },
-    resetLog (prop) {
-      this[prop] = null
+    resetLog(prop) {
+      this[prop] = null;
     },
-    errorHandler (error) {
-      console.error(error, error.response)
-      alert(error.message)
+    errorHandler(error) {
+      console.error(error, error.response);
+      alert(error.message);
     },
-    uploadFile(e) {
-      console.log('hello')
-      console.log(e)
-    }
-  }
-}
+    formSubmitted() {
+      const event = new Event('click')
+      const uploadBtn = document.querySelector('.vuejs-uploader__btn--upload')
+      uploadBtn.dispatchEvent(event)
+    },
+  },
+};
 </script>
 
 <style>
@@ -88,5 +72,9 @@ ul {
 }
 li {
   margin-bottom: 30px;
+}
+
+.disable-btn {
+  display: none;
 }
 </style>
