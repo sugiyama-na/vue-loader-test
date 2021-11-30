@@ -3,7 +3,7 @@
     <form id="formTest" 
     action="http://localhost:5000/api/post" 
     method="post"
-    @submit="formSubmitted"
+    @submit.prevent="formSubmitted"
     >
         <input
           type="text"
@@ -15,14 +15,14 @@
           value=""
           name="email"
         />
+
       <uploader
         end-point="http://localhost:5000/api/post"
         :multiple="true"
         :multipart="true"
+        :multipartChunkSize="102400"
       >
-        <button slot="upload-btn" id="upload-btn" class="disable-btn">Upload</button>
-      </uploader> 
-
+      </uploader>
       <button type="submit">送信</button>
     </form>
   </div>

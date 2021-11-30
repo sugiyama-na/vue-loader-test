@@ -5,6 +5,9 @@
  * Start built in php server using below command
  * php -S localhost:5000
  */
+echo $_POST['email'];
+echo $_POST['name'];
+echo $_FILES['file'];
 
 $uploader = new Uploader();
 $uploader->saveUploadedFile();
@@ -40,6 +43,7 @@ class Uploader
      */
     public function saveUploadedFile()
     {
+        echo $_FILES['file']['error'];
         $this->handleUploadError($_FILES['file']['error']);
 
         if (move_uploaded_file($this->getSource(), $this->getTarget())) {
@@ -160,6 +164,7 @@ class Uploader
      */
     private function getUploadedParts(string $filename): array
     {
+        echo $filename;
         return glob($filename . '.*');
     }
 
@@ -172,7 +177,6 @@ class Uploader
     private function getSortedParts(string $filename): array
     {
         $files = $this->getUploadedParts($filename);
-
         $sortedFiles = [];
         array_walk($files, function ($value, $key) use (&$sortedFiles) {
             $sortedFiles[(int) pathinfo($value)['extension']] = $value;
